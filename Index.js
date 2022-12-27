@@ -97,108 +97,6 @@
         }
     });
 
-    const http = require('http');
-    const server = http.createServer((req, res) => {
-        res.writeHead(200);
-        res.end('IT WORKS LETSS GOO');
-    });
-    server.listen(3000);
-
-    s4d.client.on('ready', async () => {
-        s4d.client.user.setPresence({
-            status: "online",
-            activities: [{
-                name: (['Some jams while moderating ', s4d.client.guilds.cache.size, ' servers!'].join('')),
-                type: "LISTENING"
-            }]
-        });
-
-    });
-
-    s4d.client.on('interactionCreate', async (interaction) => {
-        let member = interaction.guild.members.cache.get(interaction.member.user.id)
-        if ((interaction.commandName) == 'info') {
-            await interaction.reply({
-                content: 'Hello! This bot was built by JJ Tan! More will be coming in the future!',
-                ephemeral: false,
-                components: []
-            });
-        }
-        if ((interaction.commandName) == 'ban') {
-            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
-                await interaction.reply({
-                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
-                    ephemeral: false,
-                    components: []
-                });
-            }
-            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
-                (interaction.options.getMember('user')).ban({
-                    reason: (interaction.options.getString('reason'))
-                });
-                await interaction.reply({
-                    content: (['I have banned ', interaction.options.getMember('user'), ' Here\'s the reason ', interaction.options.getString('reason')].join('')),
-                    ephemeral: false,
-                    components: []
-                });
-            }
-        }
-        if ((interaction.commandName) == 'kick') {
-            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
-                await interaction.reply({
-                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
-                    ephemeral: true,
-                    components: []
-                });
-            }
-            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
-                (interaction.options.getMember('user')).kick({
-                    reason: (interaction.options.getString('reason'))
-                });
-                await interaction.reply({
-                    content: (['I have kicked ', interaction.options.getMember('user'), ' Here\'s the reason ', interaction.options.getString('reason')].join('')),
-                    ephemeral: false,
-                    components: []
-                });
-            }
-        }
-        if ((interaction.commandName) == 'timeout') {
-            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
-                await interaction.reply({
-                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
-                    ephemeral: true,
-                    components: []
-                });
-            }
-            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
-                await interaction.reply({
-                    content: (['I have timeout ', interaction.options.getMember('user'), ' For ', interaction.options.getInteger('seconds'), ' seconds. For the reason of ', interaction.options.getString('reason')].join('')),
-                    ephemeral: false,
-                    components: []
-                });
-                interaction.options.getMember('user').timeout((interaction.options.getInteger('seconds') * 1000), interaction.options.getString('reason'))
-            }
-        }
-        if ((interaction.commandName) == 'untimeout') {
-            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
-                await interaction.reply({
-                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
-                    ephemeral: true,
-                    components: []
-                });
-            }
-            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
-                (interaction.options.getMember('user')).timeout(null)
-                await interaction.reply({
-                    content: (['I have untimeout ', interaction.options.getMember('user'), ' Because ', interaction.options.getString('reason')].join('')),
-                    ephemeral: false,
-                    components: []
-                });
-            }
-        }
-
-    });
-
     synchronizeSlashCommands(s4d.client, [{
         name: 'info',
         description: 'information about the bot!',
@@ -293,8 +191,155 @@
 
             ]
         }, ]
+    }, {
+        name: 'unban',
+        description: 'UNBAN PEOPLE',
+        options: [{
+            type: 6,
+            name: 'user',
+            required: true,
+            description: 'User you want to unban lollll',
+            choices: [
+
+            ]
+        }, {
+            type: 3,
+            name: 'reason',
+            required: true,
+            description: 'Reason you want to unban lolll',
+            choices: [
+
+            ]
+        }, ]
     }, ], {
         debug: false,
+
+    });
+
+    const http = require('http');
+    const server = http.createServer((req, res) => {
+        res.writeHead(200);
+        res.end('IT WORKS LETSS GOO');
+    });
+    server.listen(3000);
+
+    s4d.client.on('ready', async () => {
+        s4d.client.user.setPresence({
+            status: "online",
+            activities: [{
+                name: (['Some jams while moderating ', s4d.client.guilds.cache.size, ' servers!'].join('')),
+                type: "LISTENING"
+            }]
+        });
+
+    });
+
+    s4d.client.on('interactionCreate', async (interaction) => {
+        let member = interaction.guild.members.cache.get(interaction.member.user.id)
+        if ((interaction.commandName) == 'info') {
+            await interaction.reply({
+                content: 'Hello! This bot was built by JJ Tan! More will be coming in the future!',
+                ephemeral: false,
+                components: []
+            });
+        }
+        if ((interaction.commandName) == 'ban') {
+            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                await interaction.reply({
+                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
+                    ephemeral: false,
+                    components: []
+                });
+            }
+            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                (interaction.options.getMember('user')).send({
+                    content: String((['You have been banned from ', interaction.guild, ' By ', interaction.member.user, ' The reason for the ban is ', interaction.options.getString('reason')].join('')))
+                });
+                (interaction.options.getMember('user')).ban({
+                    reason: (interaction.options.getString('reason'))
+                });
+                await interaction.reply({
+                    content: (['I have banned ', interaction.options.getMember('user'), ' Here\'s the reason ', interaction.options.getString('reason')].join('')),
+                    ephemeral: false,
+                    components: []
+                });
+            }
+        }
+        if ((interaction.commandName) == 'kick') {
+            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                await interaction.reply({
+                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
+                    ephemeral: true,
+                    components: []
+                });
+            }
+            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                (interaction.options.getMember('user')).send({
+                    content: String((['You have been kicked from ', interaction.guild, ' By ', interaction.member.user, ' The reason for the kick is ', interaction.options.getString('reason')].join('')))
+                });
+                (interaction.options.getMember('user')).kick({
+                    reason: (interaction.options.getString('reason'))
+                });
+                await interaction.reply({
+                    content: (['I have kicked ', interaction.options.getMember('user'), ' Here\'s the reason ', interaction.options.getString('reason')].join('')),
+                    ephemeral: false,
+                    components: []
+                });
+            }
+        }
+        if ((interaction.commandName) == 'timeout') {
+            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                await interaction.reply({
+                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
+                    ephemeral: true,
+                    components: []
+                });
+            }
+            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                await interaction.reply({
+                    content: (['I have timeout ', interaction.options.getMember('user'), ' For ', interaction.options.getInteger('seconds'), ' seconds. For the reason of ', interaction.options.getString('reason')].join('')),
+                    ephemeral: false,
+                    components: []
+                });
+                interaction.options.getMember('user').timeout((interaction.options.getInteger('seconds') * 1000), interaction.options.getString('reason'))
+            }
+        }
+        if ((interaction.commandName) == 'untimeout') {
+            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                await interaction.reply({
+                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
+                    ephemeral: true,
+                    components: []
+                });
+            }
+            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                (interaction.options.getMember('user')).timeout(null)
+                await interaction.reply({
+                    content: (['I have untimeout ', interaction.options.getMember('user'), ' Because ', interaction.options.getString('reason')].join('')),
+                    ephemeral: false,
+                    components: []
+                });
+            }
+        }
+        if ((interaction.commandName) == 'unban') {
+            if ((interaction.member.user) != (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                await interaction.reply({
+                    content: ('no. Are you even a moderator? ' + String(interaction.member.user)),
+                    ephemeral: false,
+                    components: []
+                });
+            }
+            if ((interaction.member.user) == (((interaction.guild).members.cache.get('614746968643862539') || await (interaction.guild).members.fetch('614746968643862539')).user)) {
+                (interaction.options.getMember('user')).ban({
+                    reason: (interaction.options.getString('reason'))
+                });
+                await interaction.reply({
+                    content: (['I have unbanned ', interaction.options.getMember('user'), ' Here\'s the reason ', interaction.options.getString('reason')].join('')),
+                    ephemeral: false,
+                    components: []
+                });
+            }
+        }
 
     });
 
